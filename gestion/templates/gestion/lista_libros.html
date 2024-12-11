@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Lista de Libros</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Biblioteca</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="{% url 'lista_libros' %}">Lista de Libros</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'agregar_libro' %}">Agregar Libro</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'lista_prestamos' %}">Lista de Préstamos</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'agregar_prestamo' %}">Agregar Préstamo</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'reportes' %}">Reportes</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'pagar_multa' %}">Pagar Deuda</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'logout_usuario' %}">Cerrar Sesión</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1 class="mb-4">Lista de Libros</h1>
+
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} mt-3">{{ message }}</div>
+        {% endfor %}
+
+        <form method="GET" class="mb-3">
+            <input type="text" name="q" value="{{ query }}" placeholder="Buscar por título" class="form-control" />
+            <button type="submit" class="btn btn-primary mt-2">Buscar</button>
+        </form>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Autor</th>
+                    <th>Categoría</th>
+                    <th>Ubicación</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for libro in libros %}
+                <tr>
+                    <td>{{ libro.titulo }}</td>
+                    <td>{{ libro.autor }}</td>
+                    <td>{{ libro.categoria }}</td>
+                    <td>{{ libro.ubicacion }}</td>
+                    <td>{% if libro.estado %}Disponible{% else %}No disponible{% endif %}</td>
+                    <td>
+                        <a href="{% url 'editar_libro' libro.id %}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="{% url 'eliminar_libro' libro.id %}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar este libro?');">Eliminar</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No hay libros encontrados.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

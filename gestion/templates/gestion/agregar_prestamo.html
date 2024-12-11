@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Agregar Préstamo</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Biblioteca</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="{% url 'lista_libros' %}">Lista de Libros</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'agregar_libro' %}">Agregar Libro</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'lista_prestamos' %}">Lista de Préstamos</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'agregar_prestamo' %}">Agregar Préstamo</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'reportes' %}">Reportes</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'pagar_multa' %}">Pagar Deuda</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'logout_usuario' %}">Cerrar Sesión</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1 class="mb-4">Agregar Préstamo</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="rut">RUT del Usuario</label>
+                <input type="text" class="form-control" id="rut" name="rut" required placeholder="Ingrese el RUT (sin puntos ni guión)">
+            </div>
+            <div class="form-group">
+                <label for="libro">Seleccionar Libro</label>
+                <select class="form-control" id="libro" name="libro_id" required>
+                    {% for libro in libros %}
+                    <option value="{{ libro.id }}">{{ libro.titulo }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="fecha_devolucion">Fecha de Devolución</label>
+                <input type="date" class="form-control" id="fecha_devolucion" name="fecha_devolucion" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Agregar Préstamo</button>
+        </form>
+
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} mt-3">{{ message }}</div>
+        {% endfor %}
+    </div>
+</body>
+</html>
